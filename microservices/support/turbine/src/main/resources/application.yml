@@ -8,7 +8,7 @@ info:
   component: Turbine
 
 PREFIX:
-  
+
 endpoints:
   restart:
     enabled: true
@@ -76,6 +76,7 @@ management:
   port: 0 # Avoid collisions in the unknown CF djungle...
 
 turbine:
+  clusterNameExpression: "'default'"
   amqp:
     port: 0 # Avoid collisions in the unknown CF djungle...
 
