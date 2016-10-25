@@ -1,21 +1,3 @@
-##
-## DOES NOT WORK, GIVES CIRCULAR DEPENDENCIES...
-##
-#  links:
-#    - discovery2
-#  command: java -jar -Dspring.profiles.active=docker1 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
-#  
-#discovery2:
-#  image: magnus-larsson/spring-boot
-#  restart: always
-#  ports:
-#    - "8762:8762"
-#  volumes:
-#    - $PWD:/data
-#  links:
-#    - discovery
-#  command: java -jar -Dspring.profiles.active=docker2 microservices/support/discovery-server/build/libs/discovery-server-0.0.1-SNAPSHOT.jar
-
 version: '2'
 
 services:
@@ -24,14 +6,38 @@ services:
     image: rabbitmq:3-management
     restart: always
     ports:
-  #    - "5672:5672"
       - "15672:15672"
 
   discovery:
     build: microservices/support/discovery-server
     restart: always
     ports:
+      # HOST:CONTAINER
       - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker1
+      - zone=NYC
+    extra_hosts:
+        # Knowing about the other node i.e. discovery2 is fine but knowing about itself not make any sense as JHipster registry works without this.
+        - discovery:192.168.1.4
+        - discovery2:192.168.1.4
+
+  discovery2:
+    build: microservices/support/discovery-server
+    # Not necessary to have depends_on (Only add in case you run into image already exists issues)
+    depends_on:
+      - discovery
+    restart: always
+    ports:
+      # HOST:CONTAINER
+      - "8762:8762"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker2
+      - zone=NC
+    extra_hosts:
+      # Knowing about the other node i.e. discovery is fine but knowing about itself not make any sense as JHipster registry works without this.
+      - discovery2:192.168.1.4
+      - discovery:192.168.1.4
 
   config:
     build: microservices/support/config-server
@@ -47,26 +53,53 @@ services:
     ports:
       - "9999:9999"
 
-  #turbine:
-  #  image: magnuslarsson/ms-blog-turbine
-  ##  volumes:
-  ##    - $PWD/logs:/logs
-
-  pro:
+  pro-nyc:
     build: microservices/core/product-service
     restart: always
+    environment:
+      - zone=NYC
 
-  rec:
+  rec-nyc:
     build: microservices/core/recommendation-service
     restart: always
+    environment:
+      - zone=NYC
 
-  rev:
+  rev-nyc:
     build: microservices/core/review-service
     restart: always
+    environment:
+      - zone=NYC
 
-  composite:
+  composite-nyc:
     build: microservices/composite/product-composite-service
     restart: always
+    environment:
+      - zone=NYC
+
+  pro-nc:
+    build: microservices/core/product-service
+    restart: always
+    environment:
+      - zone=NC
+
+  rec-nc:
+    build: microservices/core/recommendation-service
+    restart: always
+    environment:
+      - zone=NC
+
+  rev-nc:
+    build: microservices/core/review-service
+    restart: always
+    environment:
+      - zone=NC
+
+  composite-nc:
+    build: microservices/composite/product-composite-service
+    restart: always
+    environment:
+      - zone=NC
 
   monitor:
     build: microservices/support/monitor-dashboard
@@ -74,8 +107,18 @@ services:
     ports:
       - "7979:7979"
 
-  edge:
+  edge-ny:
     build: microservices/support/edge-server
     restart: always
     ports:
-      - "443:8765"
+      - "8443:8765"
+    environment:
+      - zone=NYC
+
+  edge-nc:
+    build: microservices/support/edge-server
+    restart: always
+    ports:
+      - "9443:8765"
+    environment:
+      - zone=NC

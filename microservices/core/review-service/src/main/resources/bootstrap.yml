@@ -29,4 +29,8 @@ spring:
         enabled: false
       uri: http://config:8888
 
+eureka:
+    instance:
+      metadataMap:
+        zone: ${zone:NYC}
 #eureka.client.serviceUrl.defaultZone: http://discovery:8761/eureka/
