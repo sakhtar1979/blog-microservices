@@ -19,8 +19,8 @@ services:
       - zone=NYC
     extra_hosts:
         # Knowing about the other node i.e. discovery2 is fine but knowing about itself not make any sense as JHipster registry works without this.
-        - discovery:192.168.1.4
-        - discovery2:192.168.1.4
+        - "discovery:192.168.1.6"
+        - "discovery2:192.168.1.6"
 
   discovery2:
     build: microservices/support/discovery-server
@@ -36,8 +36,8 @@ services:
       - zone=NC
     extra_hosts:
       # Knowing about the other node i.e. discovery is fine but knowing about itself not make any sense as JHipster registry works without this.
-      - discovery2:192.168.1.4
-      - discovery:192.168.1.4
+      - "discovery2:192.168.1.6"
+      - "discovery:192.168.1.6"
 
   config:
     build: microservices/support/config-server
@@ -52,6 +52,13 @@ services:
     restart: always
     ports:
       - "9999:9999"
+
+  turbine:
+    build: microservices/support/turbine
+    ports:
+      - "8989:8989"
+    volumes:
+      - $PWD/logs:/logs    
 
   pro-nyc:
     build: microservices/core/product-service
