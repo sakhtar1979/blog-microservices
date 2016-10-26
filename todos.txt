@@ -1,0 +1,10 @@
+To dos:
+1- Integrate Turbine
+2- Work on moving all config files (such as Zuul routes) in config project. Will look into
+following three resources:
+https://dzone.com/articles/microservice-architecture-with-spring-cloud-and-do
+and the code of above at
+https://github.com/sqshq/PiggyMetrics
+lastly the series of artices at:
+http://ryanjbaxter.com/2015/10/22/building-cloud-native-apps-with-spring-part-6/
+3- Research on Config first vs Eureka first approach.
