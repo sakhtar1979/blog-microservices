@@ -108,7 +108,9 @@ Nginx:
 To start nginx for 443 (SSL Pass thru with backup):
 sudo nginx -c ~/projects/src/callistaenterprise/blog-microservices/nginx-ssl-passthru.conf
 To stop:
-nginx -s stop
+sudo nginx -s stop
+
+Note: You don't need sudo if using higher port.
 
 Application Commands:
 TOKEN=$(curl -ks https://acme:acmesecret@localhost:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d username=user -d password=password | jq -r .access_token)
