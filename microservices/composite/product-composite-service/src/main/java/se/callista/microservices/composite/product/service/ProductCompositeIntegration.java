@@ -164,7 +164,7 @@ public class ProductCompositeIntegration {
         if (productReader != null) return productReader;
 
         ObjectMapper mapper = new ObjectMapper();
-        return productReader = mapper.reader(Product.class);
+        return productReader = mapper.readerFor(Product.class);
     }
 
     private ObjectReader reviewsReader = null;
@@ -172,7 +172,7 @@ public class ProductCompositeIntegration {
         if (reviewsReader != null) return reviewsReader;
 
         ObjectMapper mapper = new ObjectMapper();
-        return reviewsReader = mapper.reader(new TypeReference<List<Review>>() {});
+        return reviewsReader = mapper.readerFor(new TypeReference<List<Review>>() {});
     }
 
     public Product response2Product(ResponseEntity<String> response) {

@@ -24,7 +24,7 @@ import java.util.concurrent.ExecutionException;
 import static java.util.concurrent.CompletableFuture.supplyAsync;
 import static java.util.concurrent.CompletableFuture.allOf;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
-import static org.bouncycastle.asn1.x509.X509ObjectIdentifiers.id;
+
 
 /**
  * Created by magnus on 04/03/15.
