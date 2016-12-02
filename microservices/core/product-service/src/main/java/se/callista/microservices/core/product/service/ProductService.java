@@ -3,10 +3,7 @@ package se.callista.microservices.core.product.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import se.callista.microservices.model.Product;
 import se.callista.microservices.util.SetProcTimeBean;
 
@@ -34,7 +31,7 @@ public class ProductService {
      * @param productId
      * @return
      */
-    @RequestMapping("/product/{productId}")
+    @GetMapping("/product/{productId}")
     public Product getProduct(@PathVariable int productId) {
 
         int pt = setProcTimeBean.calculateProcessingTime();
@@ -62,7 +59,7 @@ public class ProductService {
      * @param minMs
      * @param maxMs
      */
-    @RequestMapping("/set-processing-time")
+    @GetMapping("/set-processing-time")
     public void setProcessingTime(
             @RequestParam(value = "minMs", required = true) int minMs,
             @RequestParam(value = "maxMs", required = true) int maxMs) {

@@ -3,6 +3,7 @@ package se.callista.microservices.core.recommendation.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,7 +46,7 @@ public class RecommendationService {
      * @param productId
      * @return
      */
-    @RequestMapping("/recommendation")
+    @GetMapping("/recommendation")
     public List<Recommendation> getRecommendations(
             @RequestParam(value = "productId",  required = true) int productId) {
 
@@ -80,7 +81,7 @@ public class RecommendationService {
      * @param minMs
      * @param maxMs
      */
-    @RequestMapping("/set-processing-time")
+    @GetMapping("/set-processing-time")
     public void setProcessingTime(
         @RequestParam(value = "minMs", required = true) int minMs,
         @RequestParam(value = "maxMs", required = true) int maxMs) {
