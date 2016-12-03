@@ -23,7 +23,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             // TODO: Where to place these properties?
-            groupId 'se.callista.microservises'
+            groupId 'com.hbo.microservises'
             artifactId 'util'
             version '0.0.1-SNAPSHOT'
 
@@ -53,5 +53,5 @@ dependencies {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.9'
+    gradleVersion = '3.1'
 }

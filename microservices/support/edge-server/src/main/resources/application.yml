@@ -72,7 +72,7 @@ zuul:
 logging:
   level:
     ROOT: WARN
-    se.callista: INFO
+    com.hbo: INFO
 
     # Get info regarding connection to the cofig server and retries if required
     org.springframework.cloud.config.client.ConfigServicePropertySourceLocator: INFO

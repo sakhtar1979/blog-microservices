@@ -50,7 +50,7 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-bus-amqp")
     compile('org.springframework.cloud:spring-cloud-starter-sleuth')
 
-    compile("se.callista.microservises:util:0.0.1-SNAPSHOT")
+    compile("com.hbo.microservises:util:0.0.1-SNAPSHOT")
 
     testCompile("org.springframework.boot:spring-boot-starter-test")
 }

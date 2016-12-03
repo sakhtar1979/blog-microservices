@@ -13,7 +13,7 @@ spring.rabbitmq:
 logging:
   level:
     root: WARN
-    se.callista: INFO
+    com.hbo: INFO
 
     org.springframework.amqp.rabbit.listener.BlockingQueueConsumer: INFO
     org.apache.catalina.session.ManagerBase: INFO

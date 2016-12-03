@@ -24,7 +24,7 @@
     </triggeringPolicy>
   </appender>
 
-  <logger name="se.callista" level="INFO"/>
+  <logger name="com.hbo" level="INFO"/>
 
   <root level="INFO">
 <!--
