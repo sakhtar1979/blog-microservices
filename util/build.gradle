@@ -2,7 +2,9 @@ buildscript {
     ext {
         springBootVersion         = '1.4.2.RELEASE'
         springCloudNetflixVersion = '1.2.3.RELEASE'
+        springSecurityVersion     = '4.2.0.RELEASE'
         springVersion             = '4.3.4.RELEASE'
+
     }
 }
 
@@ -43,7 +45,7 @@ dependencies {
     compile("org.springframework.cloud:spring-cloud-starter-hystrix:${springCloudNetflixVersion}")
 
     // TODO: Should be changed to provided to minimize class load conflicts over time???
-    compile("org.springframework.security:spring-security-core:${springVersion}")
+    compile("org.springframework.security:spring-security-core:${springSecurityVersion}")
 
     compile("net.logstash.logback:logstash-logback-encoder:4.3")
 

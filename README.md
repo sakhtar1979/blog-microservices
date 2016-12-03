@@ -7,17 +7,17 @@ installed on the docker host machine:
 4- curl
 5- jq
 6- To run load balancer (to simulate GTM/LTM), you need to have nginx with stream module installed.
-   An easy way to install on nginx (with stream module) on Mac is using Homebrew. Run following commonad
-   on terminal. With Stream is used to make ngix as SSL pass through proxy where Zuul servers are on SSL.
+   An easy way to install on nginx (with stream module) on Mac is using Homebrew. Run following command
+   on terminal. With Stream is used to make nginx as SSL pass through proxy where Zuul servers are on SSL.
 
    brew install homebrew/nginx/nginx-full --with-stream
 This guide is using Docker for Mac and also have Kitematic. You also need to have curl and jq installed.
 
 Steps to Run:
-1- Change the IP adress in docker-compose.yml to your machine's host IP address in discovery and dicovery2.
-2- Make sure that docker deamon is running on your machine.
+1- Change the IP address in docker-compose.yml to your machine's host IP address in discovery and discovery2.
+2- Make sure that docker daemon is running on your machine.
 3- Run ./build-all.sh
-4- After step 3 complestes, run the command below on terminal to run all the containers.
+4- After step 3 completes, run the command below on terminal to run all the containers.
 docker-compose up -d
 
 Wait for all the docker containers to be up and running. You can see the progress on Kitematic or better use following in a new Terminal Tab:
@@ -27,9 +27,8 @@ Steps to Verify everything is up:
 1- Check if Eureka on http://localhost:8761/ is up and running and following applications are registered:
 COMPOSITE-SERVICE, CONFIG-SERVER, EDGE-SERVER, EUREKA, PRODUCT-SERVICE, RECOMMENDATION-SERVICE, REVIEW-SERVICE
 
-2- Check if http://localhost:8762/ (Peer Eureka Server) is up and running as well. See if all the application above are registered in this instance
-   as well.
-3- Now we need to get the beaer token from auth server by running following command:
+2- Check if http://localhost:8762/ (Peer Eureka Server) is up and running as well. See if all the applications above are registered in this instance as well.
+3- Now we need to get the bearer token from auth server by running following command:
 TOKEN=$(curl -ks https://acme:acmesecret@localhost:9999/uaa/oauth/token -d grant_type=password -d client_id=acme -d username=user -d password=password | jq -r .access_token)
 
 Verify the token by running following command:
@@ -39,7 +38,7 @@ curl -H "Authorization: Bearer $TOKEN"  -ks 'https://localhost:8443/api/product/
 5- Now run following curl to call Product composite service (via Zuul) in NC zone:
 curl -H "Authorization: Bearer $TOKEN"  -ks 'https://localhost:9443/api/product/1046' | jq .
 6- Go to http://localhost:7979 and put http://composite-nyc:8080/hystrix.stream in the stream to monitor. In another window you
-   can use http://composite-nc:8080/hystrix.stream. Please note that Turbie configuration is note
+   can use http://composite-nc:8080/hystrix.stream. Please note that Turbine configuration is not
    yet working preventing us to see all Streams in one monitoring dashboard.
 
 Steps to Run Nginx SSL pass through proxy:
@@ -61,15 +60,15 @@ curl -H "Authorization: Bearer $TOKEN"  -ks 'https://localhost/api/product/1046'
 
 Note: if Token is expired then please run the Token command again.
 
-5- Now to similuate DR scenario, please stop the edgeserver in NYC (Zuul) either from command line or Kitematic
+5- Now to simulate DR scenario, please stop the edgeserver in NYC (Zuul) either from command line or Kitematic
 6- Now run the following command again:
 curl -H "Authorization: Bearer $TOKEN"  -ks 'https://localhost/api/product/1046' | jq .
 
-Expected Result: You should see NC zuul into action and all services will be called from NC zone.
+Expected Result: You should see NC Zuul into action and all services will be called from NC zone.
 It proves that using zone we can simulate current Data center and DR strategy. The failover will be done at GTM level in real
 environment (manually for DR testing and perhaps automatically for actual Disaster scenario).
 
-6- Bring back the previoulsy stopped Zuul NYC container by running:
+6- Bring back the previously stopped Zuul NYC container by running:
 docker-compose up -d
 
 7- Now again run:
@@ -85,7 +84,7 @@ blogmicroservices_rec-nyc
    and look the logs.
 
    Expected Result: You should see all the calls except blogmicroservices_rec-nyc are still going to NYC. blogmicroservices_rec-nyc is
-   now replaced by blogmicroservices_rec-nc. This shows that zone are prefered and in case of partial failure (except Zuul), it will start
+   now replaced by blogmicroservices_rec-nc. This shows that zone are preferred and in case of partial failure (except Zuul), it will start
    going to other datacenter/zone.
 
  10- Bring back the blogmicroservices_rec-nyc by running
@@ -125,5 +124,5 @@ uncomment first three lines
 
 2- git commit -a -m "make review service slow and increase log-level to DEBUG"
 
-3- Refresh the Spring confg context by running:
+3- Refresh the Spring config context by running:
 docker-compose exec rev wget -qO- localhost:8080/refresh --post-data=""["logging.level.se.callista","service.defaultMaxMs","service.defaultMinMs"]
