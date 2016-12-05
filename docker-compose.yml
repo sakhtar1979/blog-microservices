@@ -19,8 +19,8 @@ services:
       - zone=NYC
     extra_hosts:
         # Knowing about the other node i.e. discovery2 is fine but knowing about itself not make any sense as JHipster registry works without this.
-        - "discovery:192.168.1.7"
-        - "discovery2:192.168.1.7"
+        - "discovery:192.168.1.8"
+        - "discovery2:192.168.1.8"
 
   discovery2:
     build: microservices/support/discovery-server
@@ -36,8 +36,8 @@ services:
       - zone=NC
     extra_hosts:
       # Knowing about the other node i.e. discovery is fine but knowing about itself not make any sense as JHipster registry works without this.
-      - "discovery2:192.168.1.7"
-      - "discovery:192.168.1.7"
+      - "discovery2:192.168.1.8"
+      - "discovery:192.168.1.8"
 
   config:
     build: microservices/support/config-server
