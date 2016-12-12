@@ -1,3 +1,4 @@
+Please check out this project and blog-microservice-config under one folder
 PreReq:
 This readme assumes that you are either working on Mac or *Nix (or your docker host is a *Nix Virtual machine). You should also have following softwares
 installed on the docker host machine:
@@ -125,4 +126,4 @@ uncomment first three lines
 2- git commit -a -m "make review service slow and increase log-level to DEBUG"
 
 3- Refresh the Spring config context by running:
-docker-compose exec rev wget -qO- localhost:8080/refresh --post-data=""["logging.level.se.callista","service.defaultMaxMs","service.defaultMinMs"]
+docker-compose exec rev wget -qO- localhost:8080/refresh --post-data=""["logging.level.com.hbo","service.defaultMaxMs","service.defaultMinMs"]
