@@ -1,4 +1,4 @@
-Please check out this project and blog-microservice-config under one folder
+Please check out this project and blog-microservice-config under one folder (you can name it servicediscoverypoc)
 PreReq:
 This readme assumes that you are either working on Mac or *Nix (or your docker host is a *Nix Virtual machine). You should also have following softwares
 installed on the docker host machine:
@@ -50,7 +50,7 @@ from 443 to some other port in nginx-ssl-passthru.conf file. Please note that if
 to use that port in subsequent testing.
 
 2- Run following command to start nginx
-sudo nginx -c ~/projects/src/callistaenterprise/blog-microservices/nginx-ssl-passthru.conf
+sudo nginx -c ~/projects/src/servicediscoverypoc/blog-microservices/nginx-ssl-passthru.conf
 
 3- Nginx started above uses NYC zone as primary and NC for backup (Disaster onlY).
 
@@ -106,7 +106,7 @@ docker-compose stop
 
 Nginx:
 To start nginx for 443 (SSL Pass thru with backup):
-sudo nginx -c ~/projects/src/callistaenterprise/blog-microservices/nginx-ssl-passthru.conf
+sudo nginx -c ~/projects/src/servicediscoverypoc/blog-microservices/nginx-ssl-passthru.conf
 To stop:
 sudo nginx -s stop
 
