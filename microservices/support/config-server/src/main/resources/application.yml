@@ -1,4 +1,11 @@
-server.port: 8888
+server:
+  port: 8888
+  ssl:
+    key-store: classpath:server.jks
+    key-store-password: password
+    key-password: password
+
+security.basic.enabled: false
 
 # Configuration of a local Git-repo for development locally without Docker
 # note that we are still using git; We just access the git-repo via file: protocol
@@ -27,6 +34,8 @@ logging:
 # For deployment in Docker containers
 spring:
   profiles: docker
+
+security.basic.enabled: true
 
 spring.rabbitmq.host: rabbitmq
 

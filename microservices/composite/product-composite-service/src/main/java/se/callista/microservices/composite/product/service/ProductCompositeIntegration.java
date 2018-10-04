@@ -6,9 +6,7 @@ import com.fasterxml.jackson.databind.ObjectReader;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -31,13 +29,14 @@ public class ProductCompositeIntegration {
 
     private static final Logger LOG = LoggerFactory.getLogger(ProductCompositeIntegration.class);
 
-    @Inject
-    ServiceUtils util;
+    private final ServiceUtils util;
+    private final RestOperations restTemplate;
 
     @Inject
-    @LoadBalanced
-    private RestOperations restTemplate;
-
+    public ProductCompositeIntegration(ServiceUtils util, RestOperations restTemplate) {
+        this.util = util;
+        this.restTemplate = restTemplate;
+    }
 
     // -------- //
     // PRODUCTS //
@@ -68,9 +67,9 @@ public class ProductCompositeIntegration {
      * @return
      */
     public ResponseEntity<Product> defaultProduct(int productId) {
-        LOG.warn("Using fallback method for product-service");
+        LOG.warn("Using fallback method for product-service with productId: {}", productId);
         return util.createResponse(
-            new Product(productId, "Fallback Name", -1),
+            new Product(productId, "Fallback Name", -1, ""),
             HttpStatus.OK);
     }
 
@@ -108,9 +107,9 @@ public class ProductCompositeIntegration {
      * @return
      */
     public ResponseEntity<List<Recommendation>> defaultRecommendations(int productId) {
-        LOG.warn("Using fallback method for recommendation-service");
+        LOG.warn("Using fallback method for recommendation-service with productId: {}", productId);
         return util.createResponse(
-            Arrays.asList(new Recommendation(productId, 1, "Fallback Author 1", 1, "Fallback Content 1")),
+            Arrays.asList(new Recommendation(productId, 1, "Fallback Author 1", 1, "Fallback Content 1", "")),
             HttpStatus.OK);
     }
 
@@ -144,9 +143,9 @@ public class ProductCompositeIntegration {
      * @return
      */
     public ResponseEntity<List<Review>> defaultReviews(int productId) {
-        LOG.warn("Using fallback method for review-service");
+        LOG.warn("Using fallback method for review-service with productId: {}", productId);
         return util.createResponse(
-            Arrays.asList(new Review(productId, 1, "Fallback Author 1", "Fallback Subject 1", "Fallback Content 1")),
+            Arrays.asList(new Review(productId, 1, "Fallback Author 1", "Fallback Subject 1", "Fallback Content 1", "")),
             HttpStatus.OK);
     }
 

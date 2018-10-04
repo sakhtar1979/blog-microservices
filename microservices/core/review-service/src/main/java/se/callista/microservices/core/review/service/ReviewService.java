@@ -2,13 +2,16 @@ package se.callista.microservices.core.review.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservices.model.Review;
+import se.callista.microservices.util.CpuCruncherBean;
+import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import java.util.ArrayList;
@@ -26,8 +29,21 @@ public class ReviewService {
 
     private static final Logger LOG = LoggerFactory.getLogger(ReviewService.class);
 
-    @Autowired
-    private SetProcTimeBean setProcTimeBean;
+    private final SetProcTimeBean setProcTimeBean;
+    private final CpuCruncherBean cpuCruncher;
+    private final ServiceUtils util;
+    private final String mySecretProperty;
+
+    @Inject
+    public ReviewService(
+        @Value("${my-secret-property:UNKNOWN}") String mySecretProperty,
+        SetProcTimeBean setProcTimeBean, CpuCruncherBean cpuCruncher, ServiceUtils util) {
+
+        this.mySecretProperty = mySecretProperty;
+        this.setProcTimeBean = setProcTimeBean;
+        this.cpuCruncher = cpuCruncher;
+        this.util = util;
+    }
 
     /*
     private int port;
@@ -52,12 +68,16 @@ public class ReviewService {
         int pt = setProcTimeBean.calculateProcessingTime();
         LOG.info("/reviews called, processing time: {}", pt);
 
+        LOG.info("mySecretProperty: {}", mySecretProperty);
+
         sleep(pt);
 
+        cpuCruncher.exec();
+
         List<Review> list = new ArrayList<>();
-        list.add(new Review(productId, 1, "Author 1", "Subject 1", "Content 1"));
-        list.add(new Review(productId, 2, "Author 2", "Subject 2", "Content 2"));
-        list.add(new Review(productId, 3, "Author 3", "Subject 3", "Content 3"));
+        list.add(new Review(productId, 1, "Author 1", "Subject 1", "Content 1", util.getServiceAddress()));
+        list.add(new Review(productId, 2, "Author 2", "Subject 2", "Content 2", util.getServiceAddress()));
+        list.add(new Review(productId, 3, "Author 3", "Subject 3", "Content 3", util.getServiceAddress()));
 
         LOG.debug("/reviews response size: {}", list.size());
 

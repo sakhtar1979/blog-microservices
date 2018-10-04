@@ -90,6 +90,8 @@ function waitForAPI() {
 
 echo "Start:" `date`
 
+. ./setup-env.sh
+
 if [[ $@ == *"start"* ]]
 then
     echo "Restarting the test environment..."
@@ -101,12 +103,12 @@ fi
 
 waitForServices
 
-echo ''
-echo "Call /info on each microservice:"
-docker-compose exec composite wget -qO- localhost:8080/info | jq
-docker-compose exec pro wget -qO- localhost:8080/info | jq
-docker-compose exec rev wget -qO- localhost:8080/info | jq
-docker-compose exec rec wget -qO- localhost:8080/info | jq
+#echo ''
+#echo "Call /info on each microservice:"
+#docker-compose exec composite wget -qO- localhost:8080/info | jq
+#docker-compose exec pro wget -qO- localhost:8080/info | jq
+#docker-compose exec rev wget -qO- localhost:8080/info | jq
+#docker-compose exec rec wget -qO- localhost:8080/info | jq
 
 
 echo ''

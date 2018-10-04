@@ -27,17 +27,17 @@ public class AsyncCallTests {
     private static final String NAME   = "name";
     private static final int    WEIGHT = 456;
 
-    private ProductCompositeService service = new ProductCompositeService();
+    private ProductCompositeService service;
 
     private ProductCompositeIntegration mock = Mockito.mock(ProductCompositeIntegration.class);
 
-    private ServiceUtils util = new ServiceUtils();
+    private ServiceUtils util = new ServiceUtils(null, null);
 
     @Before
     public void beforeTest() {
 
         when(mock.getProduct(any(Integer.class))).
-            thenAnswer(invocation -> util.createOkResponse(new Product(getProductId(invocation), NAME, WEIGHT)));
+            thenAnswer(invocation -> util.createOkResponse(new Product(getProductId(invocation), NAME, WEIGHT, "")));
 
         when(mock.getRecommendations(any(Integer.class))).
             thenReturn(util.createOkResponse(new ArrayList<>()));
@@ -45,8 +45,8 @@ public class AsyncCallTests {
         when(mock.getReviews(any(Integer.class))).
             thenReturn(util.createOkResponse(new ArrayList<>()));
 
-        service.integration = mock;
-        service.util = util;
+        service = new ProductCompositeService(mock, util);
+
     }
 
     @Test

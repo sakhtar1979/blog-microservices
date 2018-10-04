@@ -2,13 +2,15 @@ package se.callista.microservices.core.recommendation.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import se.callista.microservices.model.Recommendation;
+import se.callista.microservices.util.CpuCruncherBean;
+import se.callista.microservices.util.ServiceUtils;
 import se.callista.microservices.util.SetProcTimeBean;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import java.util.ArrayList;
@@ -26,8 +28,16 @@ public class RecommendationService {
 
     private static final Logger LOG = LoggerFactory.getLogger(RecommendationService.class);
 
-    @Autowired
-    private SetProcTimeBean setProcTimeBean;
+    private final SetProcTimeBean setProcTimeBean;
+    private final CpuCruncherBean cpuCruncher;
+    private final ServiceUtils util;
+
+    @Inject
+    public RecommendationService(SetProcTimeBean setProcTimeBean, CpuCruncherBean cpuCruncher, ServiceUtils util) {
+        this.setProcTimeBean = setProcTimeBean;
+        this.cpuCruncher = cpuCruncher;
+        this.util = util;
+    }
 
     /*
     private int port;
@@ -54,10 +64,12 @@ public class RecommendationService {
 
         sleep(pt);
 
+        cpuCruncher.exec();
+
         List<Recommendation> list = new ArrayList<>();
-        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1"));
-        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2"));
-        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3"));
+        list.add(new Recommendation(productId, 1, "Author 1", 1, "Content 1", util.getServiceAddress()));
+        list.add(new Recommendation(productId, 2, "Author 2", 2, "Content 2", util.getServiceAddress()));
+        list.add(new Recommendation(productId, 3, "Author 3", 3, "Content 3", util.getServiceAddress()));
 
         LOG.debug("/recommendation response size: {}", list.size());
 

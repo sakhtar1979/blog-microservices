@@ -2,13 +2,11 @@ package se.callista.microservices.util;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
-/**
- * TODO: Extract to a common util-lib
- */
 @RefreshScope
 @Component
 public class SetProcTimeBean {
@@ -16,19 +14,14 @@ public class SetProcTimeBean {
     private static final Logger LOG = LoggerFactory.getLogger(SetProcTimeBean.class);
 
     private int minMs;
-
     private int maxMs;
 
-    @Value("${service.defaultMinMs:0}")
-    public void setMinMs(int minMs) {
-        LOG.info("Set min response time to {} ms.", minMs);
-        this.minMs = minMs;
-    }
+    @Autowired
+    public SetProcTimeBean(
+        @Value("${service.defaultMinMs:0}") int minMs,
+        @Value("${service.defaultMaxMs:0}") int maxMs) {
 
-    @Value("${service.defaultMaxMs:0}")
-    public void setMaxMs(int maxMs) {
-        LOG.info("Set max response time to {} ms.", maxMs);
-        this.maxMs = maxMs;
+        setDefaultProcessingTime(minMs, maxMs);
     }
 
     public void setDefaultProcessingTime(int minMs, int maxMs) {

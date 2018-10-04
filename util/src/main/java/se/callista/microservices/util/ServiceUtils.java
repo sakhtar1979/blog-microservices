@@ -3,13 +3,16 @@ package se.callista.microservices.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
+import java.net.InetAddress;
 import java.net.URI;
+import java.net.UnknownHostException;
 
 /**
  * Created by magnus on 08/03/15.
@@ -20,10 +23,19 @@ import java.net.URI;
 public class ServiceUtils {
     private static final Logger LOG = LoggerFactory.getLogger(ServiceUtils.class);
 
+    private final LoadBalancerClient loadBalancer;
+    private final String port;
+
+    private String serviceAddress = null;
+
     @Autowired
-    private LoadBalancerClient loadBalancer;
+    public ServiceUtils(
+        @Value("${server.port}") String port,
+        LoadBalancerClient loadBalancer) {
 
-
+        this.port = port;
+        this.loadBalancer = loadBalancer;
+    }
 
     /**
      *
@@ -95,4 +107,29 @@ public class ServiceUtils {
     public <T> ResponseEntity<T> createResponse(T body, HttpStatus httpStatus) {
         return new ResponseEntity<>(body, httpStatus);
     }
+
+    public String getServiceAddress() {
+        if (serviceAddress == null) {
+            serviceAddress = findMyHostname() + "/" + findMyIpAddress() + ":" + port;
+        }
+        return serviceAddress;
+    }
+
+    public String findMyHostname() {
+        try {
+            return InetAddress.getLocalHost().getHostName();
+        } catch (UnknownHostException e) {
+            return "unknown host name";
+        }
+    }
+
+    public String findMyIpAddress() {
+        try {
+            return InetAddress.getLocalHost().getHostAddress();
+        } catch (UnknownHostException e) {
+            return "unknown IP address";
+        }
+    }
+
 }
+
